@@ -5,6 +5,7 @@ const cors = require('cors')
 
 // require route files
 const petRoutes = require('./app/routes/pet_routes')
+const toyRoutes = require('./app/routes/toy_routes')
 const exampleRoutes = require('./app/routes/example_routes')
 const userRoutes = require('./app/routes/user_routes')
 
@@ -23,7 +24,7 @@ const auth = require('./lib/auth')
 // define server and client ports
 // used for cors and local port declaration
 const serverDevPort = 8000
-const clientDevPort = 3000
+const clientDevPort = 3001
 
 // establish database connection
 // use new version of URL parser
@@ -67,6 +68,7 @@ app.use(requestLogger)
 
 // register route files
 app.use(petRoutes)
+app.use(toyRoutes)
 app.use(exampleRoutes)
 app.use(userRoutes)
 

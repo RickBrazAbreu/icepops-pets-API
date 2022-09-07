@@ -21,7 +21,8 @@ mongoose.connect(db, {
 })
     .then(() => {
         // first we remove all of the pets
-        Pet.deleteMany()
+        // here we can add something to make sure we only delete pets without an owner
+        Pet.deleteMany({ owner: null })
             .then(deletedPets => {
                 console.log('deletedPets', deletedPets)
                 // the next step is to use our startPets array to create our seeded pets

@@ -29,8 +29,11 @@ const router = express.Router()
 
 // INDEX
 // GET /pets
-router.get('/pets', requireToken, (req, res, next) => {
+router.get('/pets', (req, res, next) => {
+	// we want everyone to see the pets, whether they're logged in or not.
+	// if we wanted to protect these resources, then we can add that middleware back in. and we would place it between the route and the callback function.(second argument)
 	Pet.find()
+		.populate('owner')
 		.then((pets) => {
 			// `pets` will be an array of Mongoose documents
 			// we want to convert each one to a POJO, so we use `.map` to
@@ -45,9 +48,10 @@ router.get('/pets', requireToken, (req, res, next) => {
 
 // SHOW
 // GET /pets/5a7db6c74d55bc51bdf39793
-router.get('/pets/:id', requireToken, (req, res, next) => {
+router.get('/pets/:id', (req, res, next) => {
 	// req.params.id will be set based on the `:id` in the route
 	Pet.findById(req.params.id)
+		.populate('owner')
 		.then(handle404)
 		// if `findById` is succesful, respond with 200 and "pet" JSON
 		.then((pet) => res.status(200).json({ pet: pet.toObject() }))
@@ -106,9 +110,6 @@ router.delete('/pets/:id', requireToken, (req, res, next) => {
 			// delete the pet ONLY IF the above didn't throw
 			pet.deleteOne()
 		})
-
-		//aki mostra quando esta em success
-		
 		// send back 204 and no content if the deletion succeeded
 		.then(() => res.sendStatus(204))
 		// if an error occurs, pass it to the handler
